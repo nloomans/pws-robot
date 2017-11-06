@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "DEBUG=pws* node index.js"
+  },
   "dependencies": {
     "connect": "^3.6.5",
     "debug": "^3.1.0",
