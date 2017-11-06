@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu" rel="stylesheet">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg-color: white;
+        --fg-color: black;
+      }
+
+      body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Ubuntu', sans-serif;
+
+        background-color: black;
+      }
+
+      main {
+        width: 480px;
+        height: 320px;
+        position: relative;
+
+        background-color: var(--bg-color);
+        color: var(--fg-color);
+      }
+
+      .address {
+        margin: 8px;
+      }
+
+      .address .qrcode {
+        margin: 0 auto;
+        width: 200px;
+        height: 200px;
+      }
+
+      .address .text {
+        font-family: 'Source Code Pro', monospace;
+        text-align: center;
+        margin: 11px auto;
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+      .task {
+        position: absolute;
+        bottom: 0;
+        padding: 16px 0;
+        margin: 0 16px;
+        width: calc(100% - 32px);
+        font-size: 32px;
+        border-top: 4px solid var(--fg-color);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="address">
+        <div class="qrcode"></div>
+        <div class="text"></div>
+      </div>
+      <div class="task">&nbsp;</div>
+    </main>
+
+
+    <script src="/lib/qrcode.js"></script>
+    <script src="/lib/socket.io.js"></script>
+    <script src="/lib/blockies.js"></script>
+    <script>
+      const socket = io();
+      socket.on('stateUpdate', function (state) {
+        console.log(state);
+
+        let fgColor, bgColor;
+
+        switch (state.color) {
+          case 'white':
+            bgColor = 'white';
+            fgColor = 'black';
+            break;
+          case 'red':
+            bgColor = 'red';
+            fgColor = 'white';
+            break;
+          case 'green':
+            bgColor = 'green';
+            fgColor = 'white';
+            break;
+        }
+
+        document.documentElement.style.setProperty('--bg-color', bgColor);
+        document.documentElement.style.setProperty('--fg-color', fgColor);
+
+        document.querySelector('.address .text').textContent = state.address;
+        document.querySelector('.address .qrcode').innerHTML = '';
+        if (state.address != null) {
+          new QRCode(document.querySelector('.address .qrcode'), {
+	          text: state.address.toLowerCase(),
+	          width: 200,
+	          height: 200,
+	          colorDark : "#000000",
+	          colorLight : "#ffffff",
+	          correctLevel : QRCode.CorrectLevel.L
+          });
+        }
+
+        if (state.information != null) {
+          document.querySelector('.task').textContent = state.information;
+        } else {
+          document.querySelector('.task').innerHTML = '&nbsp;';
+        }
+      });
+    </script>
+  </body>
+</html>
