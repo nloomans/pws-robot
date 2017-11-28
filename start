@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const { spawn } = require('child_process');
+
+const geth = spawn('/project/go-ethereum/build/bin/geth', ['--rinkeby', '--rpc', '--light']);
+
+function addPrefix(prefix, data) {
+  return data.toString('utf8').split('\n').map((line) => {
+    if (line === '') {
+      return line;
+    }
+    return `${prefix}${line}`;
+  }).join('\n');
+}
+
+geth.stdout.on('data', (data) => {
+  process.stdout.write(addPrefix('geth: ', data));
+});
+
+geth.stderr.on('data', (data) => {
+  process.stderr.write(addPrefix('geth: ', data));
+});
+
+geth.on('close', (code) => {
+  process.exit(code);
+});
+
+const npm = spawn('npm', ['start'], { cwd: '/project/code' });
+
+npm.stdout.on('data', (data) => {
+  process.stdout.write(addPrefix('npm:  ', data));
+});
+
+npm.stderr.on('data', (data) => {
+  process.stderr.write(addPrefix('npm:  ', data));
+});
+
+npm.on('close', (code) => {
+  process.exit(code);
+});
+
+process.on('SIGINT', process.exit);
