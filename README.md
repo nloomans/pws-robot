@@ -12,3 +12,12 @@ pws-robot
         ├── qrcode.js (qr code)
         └── socket.io.js (socket connection)
 ```
+
+
+```
+Serial at 115200 speed.
+The code is written for linux, it will not work on windows/macOS
+Dependencies:
+- PySerial https://pythonhosted.org/pyserial/
+
+```
