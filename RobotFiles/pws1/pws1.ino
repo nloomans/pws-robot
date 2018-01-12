@@ -2,11 +2,10 @@
 Servo servo1;
 Servo servo2;
 Servo servo3;
-boolean debug = true;
+boolean debug = false;
 long count = 1;
-long startLine = 1;
-long stopLine = 1;
-long dance = 1;
+
+
 void setup() {
   servo1.attach(9);
   servo2.attach(10);
@@ -16,51 +15,73 @@ void setup() {
   digitalWrite(13, LOW);
 }
 
+
 void loop() {
   if(Serial.available()){
     String input;
     input = Serial.readString();
     input.trim();
+
+    while (input == "startLine") {
+      startLine();
+      if (Serial.available()) {
+        input = Serial.readString();
+        input.trim();
+      }
+    }
+    
+    while (input == "stopLine") {
+      stopLine();
+      if (Serial.available()) {
+        input = Serial.readString();
+        input.trim();
+      }
+    }
+
+    while (input == "dance") {
+      dance();
+      if (Serial.available()) {
+        input = Serial.readString();
+        input.trim();
+      }
+    }
+    
     if (debug) {
       count += 1;
       Serial.print(count);
       Serial.print(" ");
       Serial.println(serialInput);
     }
-
-    if (input == "startLine") {
-      if(debug){
-        Serial.println("startLine Running");
-      }
-      startLine += 1;
-      digitalWrite(13, HIGH);
-      servo1.write(170);
-      servo2.write(170);
-      servo3.write(170);
-    }
-    if (input == "stopLine") {
-      if(debug){
-        Serial.println("stopLine Running");
-      }
-      stopLine += 1;
-      digitalWrite(13, HIGH);
-      servo1.write(0);
-      servo2.write(0);
-      servo3.write(0);
-    }
-    if (input == "dance") {
-      if(debug){
-        Serial.println("dance working");
-      }
-      dance += 1;
-      digitalWrite(13, HIGH);
-      servo1.write(170);
-      servo2.write(170);
-      servo3.write(170);
-    }
   }
-delay(10);
 }
 
-//100 loops = 1 second
+
+void startLine(){
+  digitalWrite(13, HIGH);
+  servo1.write(170);
+  servo2.write(170);
+}
+
+void stopLine(){
+  digitalWrite(13, LOW);
+  servo1.write(0);
+  servo2.write(0);
+  servo3.write(0);
+}
+
+void dance(){
+  digitalWrite(13, HIGH);
+  servo1.write(170);
+  servo2.write(170);
+  servo3.write(170);
+  delay(700);
+  servo1.write(170);
+  servo2.write(170);
+  servo3.write(170);
+
+}
+
+
+
+
 
