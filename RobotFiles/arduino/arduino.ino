@@ -2,7 +2,7 @@
 Servo servo1;
 Servo servo2;
 Servo servo3;
-boolean debug = true;
+boolean debug = false;
 long count = 1;
 String input;
 int ofset1 = 1;
@@ -13,8 +13,18 @@ void setup() {
   Serial.begin(115200); // opens serial port, sets data rate to 9600 bps
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
+  pinMode(12, OUTPUT);
   stopLine();
   Serial.println("start");
+
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(12, HIGH);
+    delay(100);
+    digitalWrite(12, LOW);
+    delay(100);
+  }
+
+  digitalWrite(12, LOW);
 }
 
 
@@ -25,6 +35,7 @@ void loop() {
     input.trim();
 
     while (input == "startLine") {
+      digitalWrite(12, LOW);
       startLine();
       if (Serial.available()) {
         input = Serial.readString();
@@ -37,6 +48,7 @@ void loop() {
     }
 
     while (input == "stopLine") {
+      digitalWrite(12, LOW);
       stopLine();
       if (Serial.available()) {
         input = Serial.readString();
@@ -49,6 +61,7 @@ void loop() {
     }
 
     while (input == "dance") {
+      digitalWrite(12, LOW);
       dance();
       if (Serial.available()) {
         input = Serial.readString();
@@ -59,7 +72,16 @@ void loop() {
         Serial.print("dance ");
       }
     }
+    if (input != "startLine" || input != "stopLine" || input != "dance") {
+      digitalWrite(12, HIGH);
+      stopLine();
+    }
 
+
+  }
+  if (input != "startLine" || input != "stopLine" || input != "dance") {
+    digitalWrite(12, HIGH);
+    stopLine();
   }
   if (debug) {
     count += 1;
