@@ -4,6 +4,8 @@ const debug = require('debug')('pws-robot:index');
 const Web3 = require('web3');
 const GUI = require('./gui');
 
+const { spawn } = require('child_process');
+
 if (typeof global.web3 !== 'undefined') {
   // This should never happend, but we keep it anyway juuuust to be sure.
   global.web3 = new Web3(global.web3.currentProvider);
@@ -69,7 +71,10 @@ waitForTransactionToAddress('0x5bcd404e6b96dfd033bd362d0f947753d5fb1f57').then((
   gui.state.color = 'green';
   gui.broadcastState();
 
-  // TODO: Move the robot.
+  const ardiono = spawn('python3', ['./RobotFiles/arduino.py', 'startLine']);
+  ardiono.on('close', (code) => {
+    console.log('exit code:', code);
+  });
 });
 
 // TODO: Automaticly restart the entire process.
