@@ -14,6 +14,7 @@ void setup() {
   pinMode(13, OUTPUT);
   digitalWrite(13, LOW);
   stopLine();
+  Serial.println("start");
 }
 
 
@@ -73,7 +74,7 @@ void loop() {
 void startLine() {
   digitalWrite(13, HIGH);
   servo1.write(170 + ofset1);
-  servo2.write(170);
+  servo3.write(0);
 }
 
 void stopLine() {

@@ -16,8 +16,8 @@ else:
         if sys.argv[1] == 'startLine' or sys.argv[1] == 'stopLine' or sys.argv[1] == 'dance':
             ser = serial.Serial('/dev/ttyACM0', 115200)
             ser.write(sys.argv[1])
+            print("data send")
             ser.close()
-            # print("err")
             sys.exit(0)
         else:
             # print("err")
