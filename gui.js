@@ -19,6 +19,10 @@ class GUI {
     this.io.on('connection', (socket) => {
       debug('Client connected');
 
+      socket.on('click', () => {
+        console.log('click');
+      });
+
       // Send the current application state when browser connects
       socket.emit('stateUpdate', this.state);
     });
