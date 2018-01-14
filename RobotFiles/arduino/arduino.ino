@@ -15,8 +15,9 @@ void setup() {
   digitalWrite(13, LOW);
   pinMode(12, OUTPUT);
   stopLine();
-  Serial.println("start");
-
+  if (debug) {
+    Serial.println("start");
+  }
   for (int i = 0; i < 4; i++) {
     digitalWrite(12, HIGH);
     delay(100);
