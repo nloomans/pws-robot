@@ -23,6 +23,7 @@ else:
     else:
         if sys.argv[1] == 'startLine' or sys.argv[1] == 'stopLine' or sys.argv[1] == 'dance':
             ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
+            ser.open()
             ser.write(sys.argv[1])
             print("data send")
             # ser.close()
