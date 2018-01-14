@@ -9,7 +9,7 @@ void setup() {
 
 void loop() {
 
-  if (Serial.available()) {
+  if (Serial.available()) {3
 
     input = Serial.readString();
     input.trim();
