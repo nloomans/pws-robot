@@ -25,7 +25,7 @@ else:
             ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
             ser.write(sys.argv[1])
             print("data send")
-            ser.close()
+            # ser.close()
             sys.exit(0)
         else:
             # print("err")
