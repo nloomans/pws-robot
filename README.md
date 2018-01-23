@@ -20,5 +20,5 @@ The code is written for linux, it will not work on windows/macOS.
 Give the arduino at least 2 seconds to respond to a Serial input.
 Dependencies:
 - PySerial https://pythonhosted.org/pyserial/
-
+- http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.99.1083&rep=rep1&type=pdf
 ```
