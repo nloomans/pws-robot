@@ -78,8 +78,18 @@ waitForTransactionToAddress('0x5bcd404e6b96dfd033bd362d0f947753d5fb1f57').then((
       ardiono = spawn('python', ['./RobotFiles/arduino.py', 'Z']);
       ardiono.on('close', (code) => {
         console.log('stop exit code:', code);
+        ardiono = spawn('python', ['./RobotFiles/arduino.py', 'N']);
+        ardiono.on('close', (code) => {
+          console.log('dance exit code:', code);
+          setTimeout(() => {
+            ardiono = spawn('python', ['./RobotFiles/arduino.py', 'Z']);
+            ardiono.on('close', (code) => {
+              console.log('stop exit code:', code);
+            });
+          }, 2000);
+        });
       });
-    }, 5000);
+    }, 6000);
   });
 });
 
