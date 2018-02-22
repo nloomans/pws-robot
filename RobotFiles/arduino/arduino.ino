@@ -6,109 +6,71 @@ boolean debug = false;
 long count = 1;
 String input;
 int ofset1 = 1;
+
 void setup() {
+  pinMode(3, OUTPUT);
+  digitalWrite(3, LOW);
+
   servo1.attach(9);
   servo2.attach(10);
   servo3.attach(11);
-  Serial.begin(115200); // opens serial port, sets data rate to 9600 bps
-  pinMode(13, OUTPUT);
-  digitalWrite(13, LOW);
-  pinMode(12, OUTPUT);
+  
+  Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed foAr native USB port only
+  }
+  
   stopLine();
-  if (debug) {
-    Serial.println("start");
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(5, HIGH);
+    delay(100);
+    digitalWrite(5, LOW);
+    delay(100);
   }
   for (int i = 0; i < 4; i++) {
-    digitalWrite(12, HIGH);
+    digitalWrite(6, HIGH);
     delay(100);
-    digitalWrite(12, LOW);
+    digitalWrite(6, LOW);
     delay(100);
   }
-
-  digitalWrite(12, LOW);
 }
 
 
 void loop() {
-  if (Serial.available()) {
-    String input;
-    input = Serial.readString();
-    input.trim();
-
-    while (input == "startLine") {
-      digitalWrite(12, LOW);
-      startLine();
-      if (Serial.available()) {
-        input = Serial.readString();
-        input.trim();
-      }
-
-      if (debug) {
-        Serial.print("startLine ");
-      }
+  if (Serial.available() > 0) {
+    int inByte = Serial.read();
+    digitalWrite(5, HIGH);
+    delay(200);
+    digitalWrite(5, LOW);
+    switch (inByte) {
+      case 65:
+        startLine();
+        break;
+      case 78:
+        dance();
+        break;
+      case 90:
+        stopLine();
+        break;
     }
-
-    while (input == "stopLine") {
-      digitalWrite(12, LOW);
-      stopLine();
-      if (Serial.available()) {
-        input = Serial.readString();
-        input.trim();
-      }
-
-      if (debug) {
-        Serial.print("stopLine ");
-      }
-    }
-
-    while (input == "dance") {
-      digitalWrite(12, LOW);
-      dance();
-      if (Serial.available()) {
-        input = Serial.readString();
-        input.trim();
-      }
-
-      if (debug) {
-        Serial.print("dance ");
-      }
-    }
-    if (input != "startLine" || input != "stopLine" || input != "dance") {
-      digitalWrite(12, HIGH);
-      stopLine();
-    }
-
-
-  }
-  if (input != "startLine" || input != "stopLine" || input != "dance") {
-    digitalWrite(12, HIGH);
-    stopLine();
-  }
-  if (debug) {
-    count += 1;
-    Serial.print(count);
-    Serial.print(" ");
-    Serial.println(input);
   }
 }
 
-
-
 void startLine() {
-  digitalWrite(13, HIGH);
+  digitalWrite(6, HIGH);
   servo1.write(170 + ofset1);
   servo3.write(0);
 }
 
 void stopLine() {
-  digitalWrite(13, LOW);
+  digitalWrite(6, LOW);
   servo1.write(90 + ofset1); // + 1 is ofset ofset
   servo2.write(90);
   servo3.write(90);
 }
 
 void dance() {
-  digitalWrite(13, HIGH);
+  digitalWrite(6, HIGH);
   servo1.write(170 + ofset1);
   servo2.write(170);
   servo3.write(170);
@@ -116,7 +78,6 @@ void dance() {
   servo1.write(170 + ofset1);
   servo2.write(170);
   servo3.write(170);
-
 }
 
 
